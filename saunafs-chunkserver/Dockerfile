@@ -13,7 +13,7 @@ RUN mkdir -p /mnt/hd1 /mnt/hd2 && \
 # Set up configuration directory and files
 RUN mkdir -p /etc/saunafs && \
     cp /usr/share/doc/saunafs-chunkserver/examples/sfschunkserver.cfg /etc/saunafs/ && \
-    cp /usr/share/doc/saunafs-chunkserver/examples/sfshdd.cfg /etc/saunafs/
+    cp /usr/share/doc/saunafs-chunkserver/examples/sfshdd.cfg /etc/saunafs && chown -R saunafs:saunafs /etc/saunafs/
 
 # Add mount points to sfshdd.cfg
 RUN echo "/mnt/hd1" >> /etc/saunafs/sfshdd.cfg && \

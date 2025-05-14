@@ -13,8 +13,7 @@ if [[ -z "$1" ]]; then
 fi
 
 MASTER_IP="$1"
-CONFIG_FILE="/usr/share/doc/saunafs-chunkserver/examples/sfschunkserver.cfg"
-
+CONFIG_FILE="/etc/saunafs/sfschunkserver.cfg"
 # Backup original config file
 if [[ -f "$CONFIG_FILE" ]]; then
     cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
@@ -28,6 +27,7 @@ if grep -q "^MASTER_HOST" "$CONFIG_FILE"; then
 else
     echo "MASTER_HOST = $MASTER_IP" >> "$CONFIG_FILE"
 fi
-
+sed -i 's/(Default: *\([0-9]\+\), *Minimum: *[0-9]\+)/\#/' /etc/saunafs/sfschunkserver.cfg
+cat $CONFIG_FILE
 echo "Starting sfschunkserver..."
-sfschunkserver -c $CONFIG_FILE -d
+sfschunkserver -c $CONFIG_FILE -d start
