@@ -57,6 +57,10 @@ Run chunkserver:
 $ podman run --net host -it --rm saunafs-chunkserver:latest 127.0.0.1 #loopback is experimental, just dev purpose
 ```
 
+### CGI monitoring ###
+**TO DO**
+- [ ] crate docker file
+
 ### Metalogger
 
 **TO DO***
