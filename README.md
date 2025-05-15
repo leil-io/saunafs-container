@@ -45,7 +45,7 @@ $ podman build . -t saunafs-chunkserver:latest
 ```
 
 To do:
-- [x] Fixed configuration example syntax error in 4.9.0 rpm.
+- [x] Fixed configuration example syntax error in 4.9.0 deb.
 - [ ] Provide a smart way to populate `sfshdd.cfg`.
 - [ ] Mount /mnt OR /mnt/hdd , probabily better to provide a default root /saunafs-hdd/, so you can update everything whitout restarting the container. 
 - [ ] Remove the argument MASTER_HOST and move to a configuration file OR env vars.
@@ -60,3 +60,14 @@ $ podman run --net host -it --rm saunafs-chunkserver:latest 127.0.0.1 #loopback 
 ### Metalogger
 
 **TO DO***
+
+### Client
+
+How to mount client inside a container for debugging purpose, this require `fuse` module loaded in host kernel.
+
+Start the container, 
+```
+$ podman run -it --rm --net host --device /dev/fuse  --cap-add SYS_ADMIN saunafs-base:latest /bin/bash 
+```
+A
+And then mount
