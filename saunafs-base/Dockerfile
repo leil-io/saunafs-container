@@ -25,3 +25,5 @@ RUN mkdir -p /etc/apt/auth.conf.d && \
     echo "machine https://repo.saunafs.com/repository/saunafs-ubuntu-24.04/ login docker password jaVw6MsYJhB3nxY" \
     > /etc/apt/auth.conf.d/saunafs.conf
 
+# Add utils
+RUN apt install -y iproute2
