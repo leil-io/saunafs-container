@@ -1,33 +1,19 @@
-FROM saunafs-base:latest
+FROM saunafs-base
 
-# Install SaunaFS master package
-RUN apt-get update && apt-get install -y saunafs-master
+RUN apt-get update && \
+	apt-get install -y saunafs-master && \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/*
 
-# Create dedicated user and volume path
-RUN mkdir -p /var/lib/saunafs && \
-    chown saunafs:saunafs /var/lib/saunafs
+# Define a non-volume-mapped path for templates
+ENV SAUNAFS_TEMPLATE_DIR=/opt/saunafs/templates
 
+RUN mkdir -p ${SAUNAFS_TEMPLATE_DIR} && \
+	cp /var/lib/saunafs/metadata.sfs.empty ${SAUNAFS_TEMPLATE_DIR}/metadata.sfs.empty
 
-# Copy all example configs into /etc/saunafs
+COPY saunafs-master.start.sh /saunafs-master.start.sh
+RUN chmod +x /saunafs-master.start.sh
 
-RUN echo "y" | unminimize
+EXPOSE 9419 9420 9421
 
-RUN mkdir -p /etc/saunafs && \
-    cp /usr/share/doc/saunafs-master/examples/*.cfg /etc/saunafs/
-
-# Copy init metadata file if needed (safe default)
-# Format metadata directly in image
-RUN cp -a /var/lib/saunafs/metadata.sfs.empty /var/lib/saunafs/metadata.sfs && \
-    chown saunafs:saunafs /var/lib/saunafs/metadata.sfs
-
-VOLUME ["/var/lib/saunafs"]
-
-EXPOSE 9419
-EXPOSE 9420
-EXPOSE 9421
-
-USER saunafs
-
-CMD ["/usr/sbin/sfsmaster", "-c", "/etc/saunafs/sfsmaster.cfg"]
-
-
+CMD ["/saunafs-master.start.sh"]
