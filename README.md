@@ -40,6 +40,11 @@ This file securely provides authentication for accessing the private SaunaFS APT
 ---
 
 ### Build and Run with Docker
+> **Note:**  
+> On some systems buildx docker plugin may need to be install prior following step. eg. ubuntu require
+> ```shell
+> sudo apt install -y docker-buildx
+> ```
 
 ```shell
 # Build the shared base image
