@@ -27,9 +27,9 @@ cd saunafs-container
 Before building the images, create a file named `saunafs-apt-auth.conf` in the project root directory with your SaunaFS repository credentials:
 
 ```
-machine repo.saunafs.com
-login YOUR_USERNAME
-password YOUR_PASSWORD
+machine repo.saunafs.com login YOUR_USERNAME password YOUR_PASSWORD
+machine https://repo.saunafs.com/repository/saunafs-ubuntu-24.04/ login YOUR_USERNAME password YOUR_PASSWORD
+machine https://repo.saunafs.com/repository/saunafs-ubuntu-26.04/ login YOUR_USERNAME password YOUR_PASSWORD
 ```
 
 This file securely provides authentication for accessing the private SaunaFS APT repository during image builds.
