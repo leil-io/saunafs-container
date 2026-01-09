@@ -24,18 +24,7 @@ git clone https://github.com/leil-io/saunafs-container.git
 cd saunafs-container
 ```
 
-Before building the images, create a file named `saunafs-apt-auth.conf` in the project root directory with your SaunaFS repository credentials:
-
-```
-machine repo.saunafs.com login YOUR_USERNAME password YOUR_PASSWORD
-machine https://repo.saunafs.com/repository/saunafs-ubuntu-24.04/ login YOUR_USERNAME password YOUR_PASSWORD
-machine https://repo.saunafs.com/repository/saunafs-ubuntu-26.04/ login YOUR_USERNAME password YOUR_PASSWORD
-```
-
-This file securely provides authentication for accessing the private SaunaFS APT repository during image builds.
-
-> **Note:**  
-> If you would like your own access key to the SaunaFS APT repositories, please email [contact@saunafs.com](mailto:contact@saunafs.com).
+Builds use the public SaunaFS APT repository and do not require credentials.
 
 ---
 
@@ -47,9 +36,8 @@ This file securely provides authentication for accessing the private SaunaFS APT
 > ```
 
 ```shell
-# Build the shared base image
-DOCKER_BUILDKIT=1 docker build \
-  --secret id=apt_auth,src=saunafs-apt-auth.conf \
+# Build the shared base image (no credentials required)
+docker build \
   -f saunafs-base/Dockerfile \
   -t saunafs-base saunafs-base/
 
@@ -62,9 +50,8 @@ docker compose up --build
 If you previously created a `./volumes` folder while using Docker, please delete it before deploying with Podman. This prevents permission issues that can occur due to differences in how Docker and Podman handle volume ownership.
 
 ```shell
-# Build the shared base image
+# Build the shared base image (no credentials required)
 podman build \
-  --secret id=apt_auth,src=saunafs-apt-auth.conf \
   -f saunafs-base/Dockerfile \
   -t saunafs-base saunafs-base/
 

@@ -18,7 +18,5 @@ RUN update-ca-certificates && \
 	--keyserver hkps://keyserver.ubuntu.com \
 	--receive-keys 0xA80B96E2C79457D4
 
-# Use BuildKit secret for apt authentication, install, then remove the secret file in the same layer
-RUN --mount=type=secret,id=apt_auth,mode=0444 \
-	cp /run/secrets/apt_auth /etc/apt/auth.conf.d/saunafs.conf && \
-	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/saunafs-archive-keyring.gpg] https://repo.saunafs.com/repository/saunafs-ubuntu-24.04/ noble main" > /etc/apt/sources.list.d/saunafs.list
+# Add SaunaFS APT repository (public access path); install per-child image as needed
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/saunafs-archive-keyring.gpg] https://repo.saunafs.com/repository/saunafs-ubuntu-24.04/ noble main" > /etc/apt/sources.list.d/saunafs.list
