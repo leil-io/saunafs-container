@@ -7,7 +7,7 @@ DEFAULT_CONF_SRC_DIR="/usr/share/doc/saunafs-metalogger/examples"
 TARGET_DATA_DIR="/var/lib/saunafs"
 SAUNAFS_USER="saunafs"
 
-echo "Ensuring SaunaFS Metalogger directories and configurations..."
+echo "Ensuring LeilFS Metalogger directories and configurations..."
 
 mkdir -p "${TARGET_CONF_DIR}"
 
@@ -39,6 +39,6 @@ echo "Setting final ownership for '${TARGET_CONF_DIR}' and '${TARGET_DATA_DIR}' 
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_CONF_DIR}"
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_DATA_DIR}"
 
-echo "Starting SaunaFS Metalogger..."
+echo "Starting LeilFS Metalogger..."
 # Replace shell with sfsmetalogger process
 exec sfsmetalogger -d -u

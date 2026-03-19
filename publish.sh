@@ -4,13 +4,13 @@ set -e
 
 usage() {
   echo "Usage: $0 --saunafs-version <version> --distro <distro> [--registry <registry>]"
-  echo "If --registry is not provided, defaults to registry.saunafs.com/public"
+  echo "If --registry is not provided, defaults to registry.leil.io/public"
   echo "Example: $0 --saunafs-version 5.8.0-1 --distro 24.04"
   exit 1
 }
 
 # Default registry
-REGISTRY="registry.saunafs.com/public"
+REGISTRY="registry.leil.io/public"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -52,7 +52,7 @@ docker build -t "$BASE_IMAGE" --build-arg BASE_IMAGE="ubuntu:$DISTRO" ./saunafs-
 
 # 2. Build and tag all component images
 
-echo "Building all component images with SaunaFS version $SAUNAFS_VERSION and distro $DISTRO"
+echo "Building all component images with LeilFS version $SAUNAFS_VERSION and distro $DISTRO"
 SAUNAFS_VERSION="$SAUNAFS_VERSION" TAG_SUFFIX="$TAG_SUFFIX" BASE_IMAGE="$BASE_IMAGE" docker compose build
 
 

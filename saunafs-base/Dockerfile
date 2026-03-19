@@ -2,7 +2,7 @@ ARG BASE_IMAGE=ubuntu:24.04
 FROM ${BASE_IMAGE}
 ARG BASE_IMAGE
 ENV BASE_IMAGE=${BASE_IMAGE}
-LABEL maintainer="contact@saunafs.com"
+LABEL maintainer="hello@leil.io"
 
 # Install required packages
 RUN apt-get update && \
@@ -20,7 +20,7 @@ RUN update-ca-certificates && \
 	--keyserver hkps://keyserver.ubuntu.com \
 	--receive-keys 0xA80B96E2C79457D4
 
-# Validate BASE_IMAGE and set SaunaFS repo accordingly
+# Validate BASE_IMAGE and set LeilFS repo accordingly
 RUN if [ "$BASE_IMAGE" = "ubuntu:22.04" ]; then \
       CODENAME=jammy; \
     elif [ "$BASE_IMAGE" = "ubuntu:24.04" ]; then \
@@ -29,4 +29,4 @@ RUN if [ "$BASE_IMAGE" = "ubuntu:22.04" ]; then \
       echo "ERROR: Only ubuntu:22.04 or ubuntu:24.04 are supported for now." && exit 1; \
     fi && \
     BASE_IMAGE_VERSION="${BASE_IMAGE#*:}" && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/saunafs-archive-keyring.gpg] https://repo.saunafs.com/repository/saunafs-ubuntu-$BASE_IMAGE_VERSION/ $CODENAME main" > /etc/apt/sources.list.d/saunafs.list
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/saunafs-archive-keyring.gpg] https://repo.leil.io/repository/saunafs-ubuntu-$BASE_IMAGE_VERSION/ $CODENAME main" > /etc/apt/sources.list.d/saunafs.list

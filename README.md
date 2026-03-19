@@ -1,7 +1,7 @@
-# saunafs-container
-Experimental container-based deployment cluster for [SaunaFS](https://github.com/leil-io/saunafs)
+# leilfs-container
+Experimental container-based deployment cluster for [LeilFS](https://github.com/leil-io/leilfs)
 
-The ultimate goal of this repository is to create all advantages of containers into SaunaFS project.
+The ultimate goal of this repository is to bring all the advantages of containers into LeilFS project.
 
 ## Warning - about testing and educational usage only
 
@@ -17,7 +17,7 @@ Also some (`1GB`) free space on hdd is recommended for efficient simulation of s
 
 ## Multi-Ubuntu Build & Tagging
 
-This project supports building and running for both Ubuntu 22.04 and 24.04. All images are tagged with both the SaunaFS version and the Ubuntu version for clarity (e.g. `saunafs-master:5.8.0-1-ubuntu-24.04`).
+This project supports building and running for both Ubuntu 22.04 and 24.04. All images are tagged with both the LeilFS version and the Ubuntu version for clarity (e.g. `saunafs-master:5.8.0-1-ubuntu-24.04`).
 
 ### Build base images for both Ubuntu versions
 
@@ -31,16 +31,16 @@ docker build -t saunafs-base:ubuntu-22.04 --build-arg BASE_IMAGE=ubuntu:22.04 ./
 ### Build and run the full stack for a specific Ubuntu version
 
 ```sh
-# For Ubuntu 24.04, latest SaunaFS version (default)
+# For Ubuntu 24.04, latest LeilFS version (default)
 TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 docker compose up --build
 
-# For Ubuntu 24.04, pin all components to SaunaFS version 5.8.0-1
+# For Ubuntu 24.04, pin all components to LeilFS version 5.8.0-1
 SAUNAFS_VERSION=5.8.0-1 TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 docker compose up --build
 
-# For Ubuntu 22.04, latest SaunaFS version (default)
+# For Ubuntu 22.04, latest LeilFS version (default)
 TAG_SUFFIX=ubuntu-22.04 BASE_IMAGE=saunafs-base:ubuntu-22.04 docker compose up --build
 
-# For Ubuntu 22.04, pin all components to SaunaFS version 5.8.0-1
+# For Ubuntu 22.04, pin all components to LeilFS version 5.8.0-1
 SAUNAFS_VERSION=5.8.0-1 TAG_SUFFIX=ubuntu-22.04 BASE_IMAGE=saunafs-base:ubuntu-22.04 docker compose up --build
 ```
 
@@ -64,11 +64,11 @@ docker images | grep saunafs
 Clone the repository:
 
 ```shell
-git clone https://github.com/leil-io/saunafs-container.git
-cd saunafs-container
+git clone https://github.com/leil-io/leilfs-container.git
+cd leilfs-container
 ```
 
-Builds use the public SaunaFS APT repository and do not require credentials.
+Builds use the public LeilFS APT repository and do not require credentials.
 
 See the section above for multi-Ubuntu build and tagging instructions.
 
@@ -102,28 +102,28 @@ podman build \
 # Build and start all services
 TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 podman-compose up --build
 
-Visit [http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421](http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421) to access the SaunaFS CGI.
+Visit [http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421](http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421) to access the LeilFS CGI.
 
 ## Data Persistence and Initialization
 
 This Docker deployment is designed for ease of use and demonstration.
 - **No Pre-committed Data**: The `volumes/` directory is no longer part of this repository.
 - **Automatic Initialization**: On first startup, each service (master, metalogger, chunkservers) will automatically:
-    - Create necessary configuration files using defaults from the SaunaFS packages (found in `/usr/share/doc/saunafs-*/examples/` within the containers).
+    - Create necessary configuration files using defaults from the LeilFS packages (found in `/usr/share/doc/saunafs-*/examples/` within the containers).
     - Initialize their respective data directories.
-- **Persistent Data**: If you map Docker volumes to the standard SaunaFS data and configuration paths (e.g., `/var/lib/saunafs/`, `/etc/saunafs/`), your data and custom configurations will persist across container restarts. If these mapped volumes are empty on first start, they will be initialized as described above.
+- **Persistent Data**: If you map Docker volumes to the standard LeilFS data and configuration paths (e.g., `/var/lib/saunafs/`, `/etc/saunafs/`), your data and custom configurations will persist across container restarts. If these mapped volumes are empty on first start, they will be initialized as described above.
 - **Chunkserver Storage**:
     - Chunkservers will look for mount points at `/mnt/hdd001`, `/mnt/hdd002`, etc.
     - If you provide external volumes mounted to these paths in your `docker-compose.yml`, they will be used.
     - If these paths are not externally mounted, the startup script will create them as directories within the container (volatile storage) and issue a warning. This is suitable for testing but not for production data.
 
-This setup ensures that you can get a SaunaFS cluster running quickly without manual configuration steps, while still allowing for persistent storage and custom configurations when needed.
+This setup ensures that you can get a LeilFS cluster running quickly without manual configuration steps, while still allowing for persistent storage and custom configurations when needed.
 
 ## Cleaning Up Data
 
-If you have used Docker named volumes or host-mounted directories (e.g., by customizing `docker-compose.yml` to map local paths like `./volumes/master/data:/var/lib/saunafs`), your SaunaFS data will persist even after containers are stopped and removed.
+If you have used Docker named volumes or host-mounted directories (e.g., by customizing `docker-compose.yml` to map local paths like `./volumes/master/data:/var/lib/saunafs`), your LeilFS data will persist even after containers are stopped and removed.
 
-To completely reset the SaunaFS environment and start fresh, you will need to remove this persistent data. 
+To completely reset the LeilFS environment and start fresh, you will need to remove this persistent data. 
 
 - **If using Docker named volumes**: You can list them with `docker volume ls` and remove them with `docker volume rm <volume_name>`.
 - **If using host-mounted directories**: For example, if you created a local `volumes` directory in your project and mapped subdirectories from it (e.g., `volumes/master/data`, `volumes/chunkserver1/hdd001`, etc.), you would need to manually delete these local directories. 
