@@ -15,6 +15,50 @@ Project requires `docker` and `docker-compose`
 
 Also some (`1GB`) free space on hdd is recommended for efficient simulation of storage replication.
 
+## Multi-Ubuntu Build & Tagging
+
+This project supports building and running for both Ubuntu 22.04 and 24.04. All images are tagged with both the SaunaFS version and the Ubuntu version for clarity (e.g. `saunafs-master:5.8.0-1-ubuntu-24.04`).
+
+### Build base images for both Ubuntu versions
+
+```sh
+# Ubuntu 24.04 (noble)
+docker build -t saunafs-base:ubuntu-24.04 --build-arg BASE_IMAGE=ubuntu:24.04 ./saunafs-base
+# Ubuntu 22.04 (jammy)
+docker build -t saunafs-base:ubuntu-22.04 --build-arg BASE_IMAGE=ubuntu:22.04 ./saunafs-base
+```
+
+### Build and run the full stack for a specific Ubuntu version
+
+```sh
+# For Ubuntu 24.04, latest SaunaFS version (default)
+TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 docker compose up --build
+
+# For Ubuntu 24.04, pin all components to SaunaFS version 5.8.0-1
+SAUNAFS_VERSION=5.8.0-1 TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 docker compose up --build
+
+# For Ubuntu 22.04, latest SaunaFS version (default)
+TAG_SUFFIX=ubuntu-22.04 BASE_IMAGE=saunafs-base:ubuntu-22.04 docker compose up --build
+
+# For Ubuntu 22.04, pin all components to SaunaFS version 5.8.0-1
+SAUNAFS_VERSION=5.8.0-1 TAG_SUFFIX=ubuntu-22.04 BASE_IMAGE=saunafs-base:ubuntu-22.04 docker compose up --build
+```
+
+All images will be tagged as e.g. `saunafs-master:5.8.0-1-ubuntu-24.04`, `saunafs-client:latest-ubuntu-22.04`, etc.
+
+To stop and clean up:
+```sh
+docker compose down
+```
+
+
+To see all built images:
+```sh
+docker images | grep saunafs
+```
+
+---
+
 ## Usage
 
 Clone the repository:
@@ -26,7 +70,7 @@ cd saunafs-container
 
 Builds use the public SaunaFS APT repository and do not require credentials.
 
----
+See the section above for multi-Ubuntu build and tagging instructions.
 
 ### Build and Run with Docker
 > **Note:**  
@@ -39,10 +83,10 @@ Builds use the public SaunaFS APT repository and do not require credentials.
 # Build the shared base image (no credentials required)
 docker build \
   -f saunafs-base/Dockerfile \
-  -t saunafs-base saunafs-base/
+  -t saunafs-base:ubuntu-24.04 --build-arg BASE_IMAGE=ubuntu:24.04 saunafs-base/
 
 # Build and start all services
-docker compose up --build
+TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 docker compose up --build
 ```
 
 ### Build and Run with Podman
@@ -53,16 +97,10 @@ If you previously created a `./volumes` folder while using Docker, please delete
 # Build the shared base image (no credentials required)
 podman build \
   -f saunafs-base/Dockerfile \
-  -t saunafs-base saunafs-base/
+  -t saunafs-base:ubuntu-24.04 --build-arg BASE_IMAGE=ubuntu:24.04 saunafs-base/
 
 # Build and start all services
-podman-compose up --build
-```
-
-> **Note:**  
-> `docker compose` (v2) or `podman-compose` is recommended.
-
----
+TAG_SUFFIX=ubuntu-24.04 BASE_IMAGE=saunafs-base:ubuntu-24.04 podman-compose up --build
 
 Visit [http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421](http://localhost:29425/sfs.cgi?masterhost=master&masterport=9421) to access the SaunaFS CGI.
 
