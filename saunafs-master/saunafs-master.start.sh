@@ -9,7 +9,7 @@ TARGET_DATA_DIR="/var/lib/saunafs"
 IMAGE_METADATA_TEMPLATE_PATH="/opt/saunafs/templates/metadata.sfs.empty"
 SAUNAFS_USER="saunafs"
 
-echo "Ensuring SaunaFS Master directories and configurations..."
+echo "Ensuring LeilFS Master directories and configurations..."
 
 mkdir -p "${TARGET_CONF_DIR}"
 
@@ -52,6 +52,6 @@ echo "Setting final ownership for '${TARGET_CONF_DIR}' and '${TARGET_DATA_DIR}' 
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_CONF_DIR}"
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_DATA_DIR}"
 
-echo "Starting SaunaFS Master..."
+echo "Starting LeilFS Master..."
 # Using exec to replace the shell process with sfsmaster
 exec sfsmaster -d -u

@@ -9,7 +9,7 @@ SAUNAFS_USER="saunafs"
 
 CONFIGURED_HDD_PATHS=()
 
-echo "Ensuring SaunaFS Chunkserver directories and configurations..."
+echo "Ensuring LeilFS Chunkserver directories and configurations..."
 
 mkdir -p "${TARGET_CONF_DIR}"
 
@@ -19,7 +19,7 @@ if [ ! -f "${TARGET_CONF_DIR}/sfschunkserver.cfg" ]; then
 	if [ -f "${DEFAULT_CONF_SRC_DIR}/sfschunkserver.cfg" ]; then
 		cp -v "${DEFAULT_CONF_SRC_DIR}/sfschunkserver.cfg" "${TARGET_CONF_DIR}/sfschunkserver.cfg"
 	else
-		echo "ERROR: Default '${DEFAULT_CONF_SRC_DIR}/sfschunkserver.cfg' not found. Please check SaunaFS package installation."
+		echo "ERROR: Default '${DEFAULT_CONF_SRC_DIR}/sfschunkserver.cfg' not found. Please check LeilFS package installation."
 		exit 1
 	fi
 fi
@@ -86,7 +86,7 @@ cat "${TARGET_CONF_DIR}/sfshdd.cfg"
 
 mkdir -p "${TARGET_DATA_DIR}"
 
-echo "Setting final ownership for SaunaFS directories and HDD paths to '${SAUNAFS_USER}'..."
+echo "Setting final ownership for LeilFS directories and HDD paths to '${SAUNAFS_USER}'..."
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_CONF_DIR}"
 chown -R "${SAUNAFS_USER}:${SAUNAFS_USER}" "${TARGET_DATA_DIR}"
 
@@ -101,7 +101,7 @@ if [ ${#CONFIGURED_HDD_PATHS[@]} -gt 0 ]; then
 	done
 fi
 
-echo "Starting SaunaFS Chunkserver..."
+echo "Starting LeilFS Chunkserver..."
 # Consider using su-exec to drop privileges to saunafs user if sfschunkserver doesn't do it itself
 # exec su-exec "${SAUNAFS_USER}" sfschunkserver -d -u
 exec sfschunkserver -d -u
